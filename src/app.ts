@@ -1,22 +1,32 @@
 import { userSchemas } from './routes/user/user.schema';
 import { join } from 'path';
 import AutoLoad, {AutoloadPluginOptions} from '@fastify/autoload';
-import { FastifyPluginAsync, FastifyServerOptions } from 'fastify';
+import { FastifyPluginAsync, FastifyReply, FastifyRequest, FastifyServerOptions } from 'fastify';
 import user from './routes/user';
-
+import fjwt from "@fastify/jwt"
 export interface AppOptions extends FastifyServerOptions, Partial<AutoloadPluginOptions> {
 
 }
 // Pass --options via CLI arguments in command to enable these options.
 const options: AppOptions = {
 }
-
 const app: FastifyPluginAsync<AppOptions> = async (
     fastify,
     opts
 ): Promise<void> => {
 
   // Place here your custom code!
+  
+  fastify.register(fjwt, {
+    secret: 'supersecretdasd'
+  });
+  fastify.decorate("authenticate", async (request:FastifyRequest, reply:FastifyReply)=> {
+    try {
+      await request.jwtVerify()
+    } catch (err) {
+      reply.send(err)
+    }
+  })
   for (const schema of userSchemas) {
     fastify.addSchema(schema)
     
@@ -45,3 +55,4 @@ const app: FastifyPluginAsync<AppOptions> = async (
 
 export default app;
 export { app, options }
+

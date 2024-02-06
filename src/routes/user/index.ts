@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from "fastify"
-import { registerUserHandler } from "./user.controller";
+import { loginUserHandler, registerUserHandler } from "./user.controller";
 import { $ref } from "./user.schema";
 
 const user: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
@@ -11,6 +11,15 @@ const user: FastifyPluginAsync = async (fastify, opts): Promise<void> => {
       }
     }
   },registerUserHandler)
+
+  fastify.post("/login",{
+    schema:{
+      body: $ref('loginSchema'),
+      response: {
+        200: $ref('loginResponseSchema')
+      }
+    }
+  },loginUserHandler)
 }
 
 export default user;
