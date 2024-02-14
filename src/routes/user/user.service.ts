@@ -4,8 +4,14 @@ import { CreateUserSchema } from "./user.schema";
 
 export async function createUser(input: CreateUserSchema){
   const {password, ...rest} = input
+  
     // 调用 hashPassword 函数生成密码哈希和盐
   const {hash, salt} = hashPassword(password)
+  const existingUser = await findUserByUsername(input.username)
+  if (existingUser) {
+    throw new Error('Username already exists')
+  }
+
   const user = await prisma.user.create({
     data:{
       ...rest,
@@ -17,10 +23,10 @@ export async function createUser(input: CreateUserSchema){
   return user
 }
 
-export async function findUserByEmail(email: string){
+export async function findUserByUsername(username: string){
   return prisma.user.findUnique({
     where:{
-      email: email
+      username
     }
   })
 }

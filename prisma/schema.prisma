@@ -13,12 +13,32 @@ datasource db {
 
 model User {
   id Int @id @default(autoincrement())
-  email String @unique
-  name String?
+  username String @unique 
   password String
   salt String
   products Product[]
+  canvas Canvas[]
 }
+
+
+enum CententType {
+  CONTENT
+  TEMPLATE
+  
+}
+
+model Canvas {
+  id Int @id @default(autoincrement())
+  title String @db.VarChar(255)
+  type CententType
+  content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ownerId Int
+  owner User @relation(fields: [ownerId], references: [id])
+}
+
+
 
 model Product {
   id Int @id @default(autoincrement())

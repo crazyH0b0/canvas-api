@@ -2,11 +2,10 @@ import { buildJsonSchemas } from "fastify-zod";
 import z from "zod";
 
 const createUserCoreSchema = {
-  email: z.string({
-    required_error: '邮箱不能为空',
-    invalid_type_error: '邮箱必须为字符串'
-  }).email(),
-  name: z.string(),
+  username: z.string({
+    required_error: '账号不能为空',
+    invalid_type_error: '账号必须为字符串'
+  }),
 
 }
 
@@ -20,16 +19,19 @@ const createUserCoreSchema = {
   )
 })
 const createUserResponseSchema = z.object({
-  id: z.number(),
-  ...createUserCoreSchema
+  code: z.number(),
+  data:z.object(
+    createUserCoreSchema
+  )
+ 
 
 })
 
 const loginSchema = z.object({
-  email: z.string({
-    required_error: '邮箱不能为空',
-    invalid_type_error: '邮箱必须为字符串'
-  }).email(),
+  username: z.string({
+    required_error: '账号不能为空',
+    invalid_type_error: '账号必须为字符串'
+  }),
   password: z.string(
     {
       required_error: '密码不能为空',
@@ -39,7 +41,10 @@ const loginSchema = z.object({
 })
 
 const loginResponseSchema = z.object({
-  accessToken: z.string()
+  code: z.number(),
+  data:z.object({
+    accessToken: z.string()
+  })
 })
 
 export type LoginUserSchema = z.infer<typeof loginSchema>

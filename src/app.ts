@@ -4,6 +4,7 @@ import AutoLoad, {AutoloadPluginOptions} from '@fastify/autoload';
 import { FastifyPluginAsync, FastifyReply, FastifyRequest, FastifyServerOptions } from 'fastify';
 import user from './routes/user';
 import fjwt from "@fastify/jwt"
+
 export interface AppOptions extends FastifyServerOptions, Partial<AutoloadPluginOptions> {
 
 }
@@ -31,6 +32,7 @@ const app: FastifyPluginAsync<AppOptions> = async (
     fastify.addSchema(schema)
     
   }
+
   fastify.register(user,{
     prefix:'/api/users'
   })
