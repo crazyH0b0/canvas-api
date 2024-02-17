@@ -12,10 +12,14 @@ import {
   FastifyRequest
 } from 'fastify'
 
+
 declare module 'fastify' {
   interface FastifyInstance {
     jwt: fastifyJwt.JWT
   }
+  // interface FastifyInstance {
+  //   authenticate: any;
+  // }
 
   interface FastifyReply {
     jwtSign(payload: fastifyJwt.SignPayloadType, options?: fastifyJwt.FastifyJwtSignOptions): Promise<string>

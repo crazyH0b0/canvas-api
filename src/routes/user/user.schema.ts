@@ -31,7 +31,7 @@ const loginSchema = z.object({
   username: z.string({
     required_error: '账号不能为空',
     invalid_type_error: '账号必须为字符串'
-  }),
+  }).min(1),
   password: z.string(
     {
       required_error: '密码不能为空',

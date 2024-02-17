@@ -40,10 +40,14 @@ export async function loginUserHandler(request:FastifyRequest<{
     })
     if(correctPwd){
       const {password, salt, ...rest} = user
+      const  accessToken = request.server.jwt.sign(rest,{
+
+      })
+      // reply.setCookie('token',accessToken,)
       return  {
         code: 20000,
         data:{
-          accessToken:  request.server.jwt.sign(rest)
+          accessToken
         }
       }
     }
