@@ -1,5 +1,5 @@
 import { FastifyInstance, FastifyPluginAsync } from "fastify"
-import { handleGetCanvasData, handleSaveCanvas } from "./canvas.controller";
+import {  handleDeleteCanvasById, handleGetCanvasData, handleGetCanvasList, handleSaveCanvas } from "./canvas.controller";
 import { $ref } from "./canvas.schema";
 
 
@@ -30,6 +30,26 @@ const canvas: FastifyPluginAsync = async (fastify: FastifyInstance, opts): Promi
       }
     }
   },handleGetCanvasData)
+
+  fastify.get('/canvasList',{
+    preHandler: [fastify.authenticate]
+  }, handleGetCanvasList)
+
+  fastify.delete('/:canvasId',{
+    preHandler: [fastify.authenticate],
+
+    schema:{
+      response:{
+        201: $ref('deleteCanvasResponseSchema')
+      },
+      params:{
+        type: 'object',
+        properties: { 
+          canvasId: { type: 'number'}
+         }
+      }
+    }
+  }, handleDeleteCanvasById)
 }
 
 export default canvas;

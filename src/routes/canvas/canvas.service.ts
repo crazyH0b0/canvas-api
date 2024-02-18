@@ -2,6 +2,25 @@ import { CreateOrSaveCanvasInput } from "./canvas.schema";
 import prisma from "../../utils/prisma";
 
 
+export async function deleteCanvasById(canvasId: number,ownerId: number) {
+  const canvasToDelete = await prisma.canvas.delete({
+    where:{
+      id: canvasId,
+      ownerId
+    }
+  })
+  return canvasToDelete
+}
+
+export async function getCanvasListByUserId(ownerId: number) {
+  const canvasList = await prisma.canvas.findMany({
+    where: {
+      ownerId
+    }
+  })
+  return canvasList
+}
+
 export async function getCanvasById(canvasId: number, ownerId: number) {
   
   const canvas = await prisma.canvas.findUnique({

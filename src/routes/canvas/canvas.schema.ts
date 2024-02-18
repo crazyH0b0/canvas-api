@@ -31,10 +31,18 @@ const getCanvasDataResponseSchema =z.object({
   })
 }
 )
+
+const deleteCanvasResponseSchema = z.object({
+  code: z.number(),
+  data: z.object({
+    canvasId:  z.number()
+  })
+})
 export type CreateOrSaveCanvasInput = z.infer<typeof createOrSaveCanvasSchema>;
 
 export const {schemas: canvasSchemas,$ref} = buildJsonSchemas({
   createOrSaveCanvasSchema,
   getCanvasDataResponseSchema,
+  deleteCanvasResponseSchema,
   saveCanvasResponse
 },{$id:'canvasSchemas'})

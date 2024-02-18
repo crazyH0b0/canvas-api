@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from "fastify";
-import { getCanvasById, saveCanvase } from "./canvas.service";
+import { deleteCanvasById, getCanvasById, getCanvasListByUserId, saveCanvase } from "./canvas.service";
 
 export async function handleSaveCanvas(request:FastifyRequest, reply:FastifyReply) {
   
@@ -38,4 +38,23 @@ export async function handleGetCanvasData(request:FastifyRequest, reply:FastifyR
       data:{ canvas}
     })
   
+  }
+
+  export async function handleGetCanvasList(request:FastifyRequest, reply:FastifyReply) {
+    const  ownerId =  (request.user as { id: number }).id 
+    const canvasListData = await getCanvasListByUserId(ownerId)
+    return reply.code(200).send({
+      code: 20000,
+      data:{ canvasListData}
+    })
+  }
+
+  export async function handleDeleteCanvasById(request:FastifyRequest, reply:FastifyReply) {
+    const  ownerId =  (request.user as { id: number }).id 
+    const { canvasId } = request.params as { canvasId: number };
+    const deletedCanvas = await deleteCanvasById(canvasId, ownerId)
+    return reply.code(201).send({
+      code: 20000,
+      data:{ canvasId:deletedCanvas.id}
+    })
   }
